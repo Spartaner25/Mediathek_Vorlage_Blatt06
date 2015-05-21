@@ -3,10 +3,12 @@ package de.uni_hamburg.informatik.swt.se2.mediathek.werkzeuge.vormerken;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.mediathek.materialien.Kunde;
+import de.uni_hamburg.informatik.swt.se2.mediathek.materialien.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.materialien.medien.Medium;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.ServiceObserver;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.KundenstammService;
@@ -153,14 +155,15 @@ public class VormerkWerkzeug
      */
     private void registriereVormerkAktion()
     {
-        _vormerkUI.getVormerkenButton().addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
+        _vormerkUI.getVormerkenButton()
+            .addActionListener(new ActionListener()
             {
-                merkeAusgewaehlteMedienVor();
-            }
-        });
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    merkeAusgewaehlteMedienVor();
+                }
+            });
     }
 
     /**
@@ -169,16 +172,15 @@ public class VormerkWerkzeug
      */
     private void registriereKundenAnzeigenAktion()
     {
-        _kundenAuflisterWerkzeug
-                .registriereBeobachter(new SubWerkzeugObserver()
-                {
-                    @Override
-                    public void reagiereAufAenderung()
-                    {
-                        zeigeAusgewaehltenKunden();
-                        aktualisiereVormerkButton();
-                    }
-                });
+        _kundenAuflisterWerkzeug.registriereBeobachter(new SubWerkzeugObserver()
+        {
+            @Override
+            public void reagiereAufAenderung()
+            {
+                zeigeAusgewaehltenKunden();
+                aktualisiereVormerkButton();
+            }
+        });
     }
 
     /**
@@ -187,17 +189,16 @@ public class VormerkWerkzeug
      */
     private void registriereMedienAnzeigenAktion()
     {
-        _medienAuflisterWerkzeug
-                .registriereBeobachter(new SubWerkzeugObserver()
-                {
+        _medienAuflisterWerkzeug.registriereBeobachter(new SubWerkzeugObserver()
+        {
 
-                    @Override
-                    public void reagiereAufAenderung()
-                    {
-                        zeigeAusgewaehlteMedien();
-                        aktualisiereVormerkButton();
-                    }
-                });
+            @Override
+            public void reagiereAufAenderung()
+            {
+                zeigeAusgewaehlteMedien();
+                aktualisiereVormerkButton();
+            }
+        });
     }
 
     /**
@@ -206,16 +207,45 @@ public class VormerkWerkzeug
      * 
      * @return true, wenn vormerken möglich ist, sonst false.
      */
-    private boolean istVormerkenMoeglich()
+    public boolean istVormerkenMoeglich()
     {
         List<Medium> medien = _medienAuflisterWerkzeug.getSelectedMedien();
         Kunde kunde = _kundenAuflisterWerkzeug.getSelectedKunde();
-        // TODO für Aufgabenblatt 6 (nicht löschen): Prüfung muss noch eingebaut
+        // TODO Done für Aufgabenblatt 6 (nicht löschen): Prüfung muss noch eingebaut
         // werden. Ist dies korrekt imlpementiert, wird der Vormerk-Button gemäß
         // der Anforderungen a), b), c) und e) aktiviert.
         boolean vormerkenMoeglich = (kunde != null) && !medien.isEmpty();
+        boolean frei = true;
 
-        return vormerkenMoeglich;
+        for (Medium ele : medien)
+        {
+
+            if (_verleihService.istVerliehenAn(kunde, ele)) frei = false;
+
+            if (frei)
+            {
+
+                Vormerkkarte k= _verleihService.getVormerkkarten().get(ele);
+
+                if (k != null)
+                {
+
+                    frei = frei && k.getVormerker()
+                        .size() < 3;
+
+                    for (Kunde eleKunde : k.getVormerker())
+                    {
+
+                        frei = frei && !eleKunde.equals(kunde);
+
+                    }
+                }
+            }
+
+        }
+          
+
+        return vormerkenMoeglich && frei;
     }
 
     /**
@@ -226,10 +256,32 @@ public class VormerkWerkzeug
     private void merkeAusgewaehlteMedienVor()
     {
 
-        List<Medium> selectedMedien = _medienAuflisterWerkzeug
-                .getSelectedMedien();
+        List<Medium> selectedMedien = _medienAuflisterWerkzeug.getSelectedMedien();
         Kunde selectedKunde = _kundenAuflisterWerkzeug.getSelectedKunde();
-        // TODO für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
+
+        // TODO Motherfucking Done für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
+        for (Medium medium : selectedMedien)
+        {
+            Vormerkkarte karte = _verleihService.getVormerkkarten()
+                .get(medium);
+            if (karte != null)
+            {
+                if (karte.getVormerker()
+                    .size() < 3)
+                {
+                    karte.getVormerker()
+                        .add(selectedKunde);
+                }
+            }
+            else
+            {
+                _verleihService.getVormerkkarten()
+                    .put(medium, new Vormerkkarte(selectedKunde, medium));
+            }
+        }
+        zeigeAusgewaehlteMedien();
+        aktualisiereVormerkButton();
+        _verleihService.aktualisieren();
 
     }
 
@@ -238,8 +290,7 @@ public class VormerkWerkzeug
      */
     private void zeigeAusgewaehlteMedien()
     {
-        List<Medium> selectedMedien = _medienAuflisterWerkzeug
-                .getSelectedMedien();
+        List<Medium> selectedMedien = _medienAuflisterWerkzeug.getSelectedMedien();
         _medienDetailAnzeigerWerkzeug.setMedien(selectedMedien);
     }
 
@@ -264,7 +315,8 @@ public class VormerkWerkzeug
     private void aktualisiereVormerkButton()
     {
         boolean istVormerkenMoeglich = istVormerkenMoeglich();
-        _vormerkUI.getVormerkenButton().setEnabled(istVormerkenMoeglich);
+        _vormerkUI.getVormerkenButton()
+            .setEnabled(istVormerkenMoeglich);
     }
 
     /**

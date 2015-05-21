@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import de.uni_hamburg.informatik.swt.se2.mediathek.fachwerte.Datum;
 import de.uni_hamburg.informatik.swt.se2.mediathek.materialien.Kunde;
+import de.uni_hamburg.informatik.swt.se2.mediathek.materialien.Vormerkkarte;
 import de.uni_hamburg.informatik.swt.se2.mediathek.materialien.medien.Medium;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.ServiceObserver;
 import de.uni_hamburg.informatik.swt.se2.mediathek.services.kundenstamm.KundenstammService;
@@ -213,11 +214,18 @@ public class AusleihWerkzeug
     {
         List<Medium> medien = _medienAuflisterWerkzeug.getSelectedMedien();
         Kunde kunde = _kundenAuflisterWerkzeug.getSelectedKunde();
-        // TODO für Aufgabenblatt 6 (nicht löschen): So ändern, dass vorgemerkte
+        // TODO Done für Aufgabenblatt 6 (nicht löschen): So ändern, dass vorgemerkte
         // Medien nur vom ersten Vormerker ausgeliehen werden können, gemäß
         // Anforderung d).
+        boolean keineKarteOderErster = true;
+        for(Medium medium : medien) {
+            Vormerkkarte karte = _verleihService.getVormerkkarten().get(medium);
+            if(karte != null) {
+                if(!karte.getVormerker().get(0).equals(kunde)) keineKarteOderErster = false;
+            }
+        }
         boolean ausleiheMoeglich = (kunde != null) && !medien.isEmpty()
-                && _verleihService.sindAlleNichtVerliehen(medien);
+                && _verleihService.sindAlleNichtVerliehen(medien) && keineKarteOderErster;
 
         return ausleiheMoeglich;
     }
