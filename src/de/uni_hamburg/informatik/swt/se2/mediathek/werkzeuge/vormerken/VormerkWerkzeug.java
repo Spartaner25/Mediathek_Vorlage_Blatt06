@@ -3,7 +3,6 @@ package de.uni_hamburg.informatik.swt.se2.mediathek.werkzeuge.vormerken;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JPanel;
 
