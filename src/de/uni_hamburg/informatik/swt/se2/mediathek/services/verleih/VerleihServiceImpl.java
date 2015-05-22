@@ -165,7 +165,7 @@ public class VerleihServiceImpl extends AbstractObservableService implements
         //TOdO Done Fixed Possible Bug
         assert kundeImBestand(kunde) : "Vorbedingung verletzt: kundeImBestand(kunde)";
         assert mediumImBestand(medium) : "Vorbedingung verletzt: mediumImBestand(medium)";
-
+        if(_verleihkarten.get(medium)==null) return false;
         return _verleihkarten.get(medium).getEntleiher() ==kunde;
     }
 
