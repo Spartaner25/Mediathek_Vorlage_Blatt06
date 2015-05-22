@@ -162,11 +162,11 @@ public class VerleihServiceImpl extends AbstractObservableService implements
     @Override
     public boolean istVerliehenAn(Kunde kunde, Medium medium)
     {
-        //TOdO Done
+        //TOdO Done Fixed Possible Bug
         assert kundeImBestand(kunde) : "Vorbedingung verletzt: kundeImBestand(kunde)";
         assert mediumImBestand(medium) : "Vorbedingung verletzt: mediumImBestand(medium)";
 
-        return _verleihkarten.get(medium)!=null;
+        return _verleihkarten.get(medium).getEntleiher() ==kunde;
     }
 
     @Override

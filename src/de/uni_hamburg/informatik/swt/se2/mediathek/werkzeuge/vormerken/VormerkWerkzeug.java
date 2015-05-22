@@ -215,28 +215,28 @@ public class VormerkWerkzeug
         // werden. Ist dies korrekt imlpementiert, wird der Vormerk-Button gemäß
         // der Anforderungen a), b), c) und e) aktiviert.
         boolean vormerkenMoeglich = (kunde != null) && !medien.isEmpty();
-        boolean frei = true;
+        boolean moeglich= true;
 
-        for (Medium ele : medien)
+        for (Medium m : medien)
         {
+//TODO Done Bugfix 223
+            if (_verleihService.istVerliehenAn(kunde, m)) moeglich = false;
 
-            if (_verleihService.istVerliehenAn(kunde, ele)) frei = false;
-
-            if (frei)
+            if (moeglich)
             {
 
-                Vormerkkarte k= _verleihService.getVormerkkarten().get(ele);
+                Vormerkkarte k= _verleihService.getVormerkkarten().get(m);
 
                 if (k != null)
                 {
 
-                    frei = frei && k.getVormerker()
+                    moeglich = moeglich && k.getVormerker()
                         .size() < 3;
 
-                    for (Kunde eleKunde : k.getVormerker())
+                    for (Kunde aK : k.getVormerker())
                     {
 
-                        frei = frei && !eleKunde.equals(kunde);
+                       moeglich= moeglich && !aK.equals(kunde);
 
                     }
                 }
@@ -245,7 +245,7 @@ public class VormerkWerkzeug
         }
           
 
-        return vormerkenMoeglich && frei;
+        return vormerkenMoeglich && moeglich;
     }
 
     /**
