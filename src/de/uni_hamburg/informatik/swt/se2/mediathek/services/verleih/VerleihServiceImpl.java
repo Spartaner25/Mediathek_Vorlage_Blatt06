@@ -302,11 +302,15 @@ return _vormerkkarten;
        informiereUeberAenderung(); 
         
     }
-   public Kunde getVormerkerfueMediumAn(int a, Medium m)
+    
+    @Override
+   public Kunde getVormerkerfuerMediumAn(int a, Medium m)
     {
         return getVormerkkarten().get(m).getVormerker(a);
     }
-    public List <Kunde> getVormerkerfueMedium(Medium m)
+    
+    @Override
+    public List <Kunde> getVormerkerfuerMedium(Medium m)
     {
         return getVormerkkarten().get(m).getVormerker();
     }    

@@ -228,13 +228,32 @@ public interface VerleihService extends ObservableService
      * 
      * @ensure (result != null)
      */
-    
-    //TODO Kommentar
-     Map<Medium, Vormerkkarte> getVormerkkarten();
-
     Verleihkarte getVerleihkarteFuer(Medium medium);
 
+    /**
+     * Aktualisiert UI.
+     */
     void aktualisieren();
-    Kunde getVormerkerfueMediumAn(int a, Medium m);
-    List <Kunde> getVormerkerfueMedium(Medium m);
+    
+    /**
+     * Gibt den Vormerker an einer Stelle a für das Medium m zurück.
+     * 
+     * @param a Vormerkerstelle
+     * @param m Medium
+     * @return Der Vormerker
+     * 
+     * @require (m != null)
+     * @require (0 < a < 4)
+     */
+    Kunde getVormerkerfuerMediumAn(int a, Medium m);
+    
+    /**
+     * Gibt alle Vormerker für ein Medium zurück.
+     * 
+     * @param m Das Medium
+     * @return Alle Vormerker des Mediums
+     * 
+     * @require (m != null)
+     */
+    List <Kunde> getVormerkerfuerMedium(Medium m);
 }
