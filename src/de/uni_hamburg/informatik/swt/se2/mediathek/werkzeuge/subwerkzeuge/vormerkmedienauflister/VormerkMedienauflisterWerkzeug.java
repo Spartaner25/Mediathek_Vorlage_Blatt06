@@ -90,13 +90,13 @@ public class VormerkMedienauflisterWerkzeug extends ObservableSubWerkzeug
             Kunde vormerker3 = null;
             if(_verleihService.getVormerkkarten() != null) {
                 if(_verleihService.getVormerkkarten().get(medium) != null) {
-                    for(int i=0;i<_verleihService.getVormerkerfueMedium(medium).size();i++) {
+                    for(int i=0;i<_verleihService.getVormerkerfuerMedium(medium).size();i++) {
                         switch(i) {
-                        case 0: vormerker1 = _verleihService.getVormerkerfueMediumAn(0, medium);
+                        case 0: vormerker1 = _verleihService.getVormerkerfuerMediumAn(0, medium);
                         break;
-                        case 1: vormerker2 = _verleihService.getVormerkerfueMediumAn(1, medium);
+                        case 1: vormerker2 = _verleihService.getVormerkerfuerMediumAn(1, medium);
                         break;
-                        case 2: vormerker3 =_verleihService.getVormerkerfueMediumAn(2, medium);
+                        case 2: vormerker3 =_verleihService.getVormerkerfuerMediumAn(2, medium);
                         break;
                         }
                     }

@@ -256,4 +256,10 @@ public interface VerleihService extends ObservableService
      * @require (m != null)
      */
     List <Kunde> getVormerkerfuerMedium(Medium m);
+    
+    /**
+     * Gibt alle Vormerkkarten zurück
+     * @return alle Vormerkkarten
+     */
+    Map<Medium, Vormerkkarte> getVormerkkarten();
 }

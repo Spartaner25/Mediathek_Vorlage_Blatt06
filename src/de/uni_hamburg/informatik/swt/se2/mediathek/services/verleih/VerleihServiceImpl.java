@@ -292,9 +292,11 @@ public class VerleihServiceImpl extends AbstractObservableService implements
         }
         return result;
     }
-    public Map<Medium, Vormerkkarte> getVormerkkarten(){
-return _vormerkkarten;
-}
+    
+    public Map<Medium, Vormerkkarte> getVormerkkarten()
+    {
+    	return _vormerkkarten;
+    }
 
     @Override
     public void aktualisieren()
