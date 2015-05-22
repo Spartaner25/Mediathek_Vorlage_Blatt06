@@ -219,7 +219,7 @@ public class VormerkWerkzeug
 
         for (Medium m : medien)
         {
-//TODO Done Bugfix 223
+
             if (_verleihService.istVerliehenAn(kunde, m)) moeglich = false;
 
             if (moeglich)
@@ -259,7 +259,7 @@ public class VormerkWerkzeug
         List<Medium> selectedMedien = _medienAuflisterWerkzeug.getSelectedMedien();
         Kunde selectedKunde = _kundenAuflisterWerkzeug.getSelectedKunde();
 
-        // TODO Motherfucking Done für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
+        // TODO Done für Aufgabenblatt 6 (nicht löschen): Vormerken einbauen
         for (Medium medium : selectedMedien)
         {
             Vormerkkarte karte = _verleihService.getVormerkkarten()

@@ -218,10 +218,10 @@ public class AusleihWerkzeug
         // Medien nur vom ersten Vormerker ausgeliehen werden können, gemäß
         // Anforderung d).
         boolean keineKarteOderErster = true;
-        for(Medium medium : medien) {
-            Vormerkkarte karte = _verleihService.getVormerkkarten().get(medium);
-            if(karte != null) {
-                if(!karte.getVormerker().get(0).equals(kunde)) keineKarteOderErster = false;
+        for(Medium m : medien) {
+            Vormerkkarte k = _verleihService.getVormerkkarten().get(m);
+            if(k != null) {
+                if(!k.getVormerker().get(0).equals(kunde)) keineKarteOderErster = false;
             }
         }
         boolean ausleiheMoeglich = (kunde != null) && !medien.isEmpty()

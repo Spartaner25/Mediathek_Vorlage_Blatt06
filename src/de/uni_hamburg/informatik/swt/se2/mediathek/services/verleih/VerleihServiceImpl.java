@@ -95,7 +95,7 @@ public class VerleihServiceImpl extends AbstractObservableService implements
     @Override
     public boolean istVerliehen(Medium medium)
     {
-        //TODO Did changes
+        
         assert mediumImBestand(medium) : "Vorbedingung verletzt: mediumExistiert(medium)";
         return _verleihkarten.get(medium) != null;
     }
@@ -265,7 +265,7 @@ public class VerleihServiceImpl extends AbstractObservableService implements
     @Override
     public Kunde getEntleiherFuer(Medium medium)
     {
-        //TODO Done Assert Entfernt assert istVerliehen(medium) : "Vorbedingung verletzt: istVerliehen(medium)";
+        
         Verleihkarte verleihkarte = _verleihkarten.get(medium);
         if(verleihkarte==null) return null;
         return verleihkarte.getEntleiher();
